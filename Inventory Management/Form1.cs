@@ -49,9 +49,9 @@ namespace Inventory_Management
                         {
                             MessageBox.Show("Login Successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            MainForm mForm = new MainForm();
-                            mForm.Show();
+                            Main_Form mForm = new Main_Form();
                             this.Hide();
+                            mForm.Show();
                         }
                         else
                         {

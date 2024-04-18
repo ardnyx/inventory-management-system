@@ -7,32 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data;
-using System.Data.SqlClient;
 
 namespace Inventory_Management
 {
-    public partial class AddProducts : UserControl
+    public partial class ProductManagement : Form
     {
-        public DataTable inventory = new DataTable();
-        public AddProducts()
+        Main_Form main_Form;
+        static DataTable inventory = new DataTable();
+        public ProductManagement()
         {
             InitializeComponent();
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        public void refreshData()
+        private void addProduct_ID_TextChanged(object sender, EventArgs e)
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)refreshData);
-                return;
-            }
+
         }
 
         private void addProduct_addBTN_Click(object sender, EventArgs e)
         {
-
             string prodId = addProduct_ID.Text;
             string prodName = addProduct_prodName.Text;
             string category = addProduct_category.Text;
@@ -54,10 +48,8 @@ namespace Inventory_Management
             string status = (string)addProduct_status.SelectedItem;
 
             inventory.Rows.Add(prodId, prodName, category, price, stock, status);
-
             ClearBoxes();
         }
-
         private void ClearBoxes()
         {
             addProduct_ID.Text = "";
@@ -67,30 +59,18 @@ namespace Inventory_Management
             addProduct_stock.Text = "";
             addProduct_status.SelectedIndex = -1;
         }
-
-        private void addProduct_clearBTN_Click(object sender, EventArgs e)
-        {
-            ClearBoxes();
-        }
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void addProduct_removeBTN_Click(object sender, EventArgs e)
         {
             try
             {
-                addProduct_ID.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[0].ToString();
-                addProduct_prodName.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[1].ToString();
-                addProduct_category.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[2].ToString();
-                addProduct_price.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[3].ToString();
-                addProduct_stock.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[4].ToString();
-
-                string statusToLookFor = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[5].ToString();
-                addProduct_status.SelectedIndex = addProduct_status.Items.IndexOf(statusToLookFor);
+                inventory.Rows[dataGridView1.CurrentCell.RowIndex].Delete();
+                ClearBoxes();
             }
-            catch (Exception ex)
+            catch (Exception err)
             {
-                // Handle the exception silently (do nothing)
+                MessageBox.Show("Error: " + err, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void addProduct_updateBTN_Click(object sender, EventArgs e)
         {
@@ -145,51 +125,65 @@ namespace Inventory_Management
             }
         }
 
-
-        private void addProduct_removeBTN_Click(object sender, EventArgs e)
+        private void addProduct_clearBTN_Click(object sender, EventArgs e)
         {
-           try
-            {
-                inventory.Rows[dataGridView1.CurrentCell.RowIndex].Delete();
-                ClearBoxes();
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show("Error: " + err, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            ClearBoxes();
+        }
+
+        private void dashboard_BTN_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            main_Form = new Main_Form();
+            main_Form.ShowDialog();
+        }
+
+        private void products_BTN_Click(object sender, EventArgs e)
+        {
 
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
+
         }
 
-        private void AddProducts_Load(object sender, EventArgs e)
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            inventory.Columns.Add("Product ID");
-            inventory.Columns.Add("Product Name");
-            inventory.Columns.Add("Category");
-            inventory.Columns.Add("Price");
-            inventory.Columns.Add("Stock");
-            inventory.Columns.Add("Status");
+            try
+            {
+                addProduct_ID.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[0].ToString();
+                addProduct_prodName.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[1].ToString();
+                addProduct_category.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[2].ToString();
+                addProduct_price.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[3].ToString();
+                addProduct_stock.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[4].ToString();
+
+                string statusToLookFor = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[5].ToString();
+                addProduct_status.SelectedIndex = addProduct_status.Items.IndexOf(statusToLookFor);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception silently (do nothing)
+            }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void ProductManagement_Load(object sender, EventArgs e)
+        {
+            if (inventory.Columns.Count == 0)
+            {
+                inventory.Columns.Add("Product ID");
+                inventory.Columns.Add("Product Name");
+                inventory.Columns.Add("Category");
+                inventory.Columns.Add("Price");
+                inventory.Columns.Add("Stock");
+                inventory.Columns.Add("Status");
+            }
 
             dataGridView1.DataSource = inventory;
-        }
-
-        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void addProduct_price_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -20,8 +20,6 @@ namespace Inventory_Management
         public Dashboard()
         {
             InitializeComponent();
-            addProducts = MainForm.Instance.AddProductsControl; // Access the same instance
-            addProducts.InventoryUpdated += AddProducts_InventoryUpdated; // Subscribe to event
             RefreshData();
         }
 
@@ -69,7 +67,6 @@ namespace Inventory_Management
         
         private void Dashboard_Load(object sender, EventArgs e)
         {
-            addProducts.InventoryUpdated += AddProducts_InventoryUpdated;
         }
 
         private void inventoryValue_Click(object sender, EventArgs e)

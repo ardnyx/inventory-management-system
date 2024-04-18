@@ -28,3 +28,19 @@ C:\Users\Reiyane\Desktop\inventory-management-system\Inventory Management\obj\De
 C:\Users\Reiyane\Desktop\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.csproj.CoreCompileInputs.cache
 C:\Users\Reiyane\Desktop\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.exe
 C:\Users\Reiyane\Desktop\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.pdb
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.csproj.AssemblyReference.cache
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.AddCategory.resources
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.AddProducts.resources
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.Dashboard.resources
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.Form1.resources
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.Main_Form.resources
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.Properties.Resources.resources
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.RegisterForm.resources
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.csproj.GenerateResource.cache
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.csproj.CoreCompileInputs.cache
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.exe
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory Management.pdb
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\bin\Debug\Inventory Management.exe.config
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\bin\Debug\Inventory Management.exe
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\bin\Debug\Inventory Management.pdb
+C:\Users\Reiyane\Desktop\inventory-management-system\inventory-management-system\Inventory Management\obj\Debug\Inventory_Management.ProductManagement.resources
