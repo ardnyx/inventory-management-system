@@ -12,23 +12,6 @@ namespace Inventory_Management
 {
     public partial class MainForm : Form
     {
-
-        public AddProducts AddProductsControl
-        {
-            get { return addProducts1; }
-        }
-        public static MainForm instance;
-        public static MainForm Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new MainForm();
-                }
-                return instance;
-            }
-        }
         public MainForm()
         {
             InitializeComponent();
