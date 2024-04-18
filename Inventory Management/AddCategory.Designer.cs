@@ -163,7 +163,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(579, 513);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-            this.dataGridView1.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridView1_RowsRemoved);
             // 
             // AddCategory
             // 
@@ -173,7 +172,6 @@
             this.Controls.Add(this.panel1);
             this.Name = "AddCategory";
             this.Size = new System.Drawing.Size(920, 625);
-            this.Load += new System.EventHandler(this.AddCategory_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

@@ -13,11 +13,15 @@ namespace Inventory_Management
 {
     public partial class Dashboard : UserControl
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Reiyane\Documents\inventory.mdf;Integrated Security=True;Connect Timeout=30");
+        private AddProducts addProducts;
+        private double InventoryValue = 0;
+        private int RemainingStocks = 0;
 
         public Dashboard()
         {
             InitializeComponent();
+            addProducts = MainForm.Instance.AddProductsControl; // Access the same instance
+            addProducts.InventoryUpdated += AddProducts_InventoryUpdated; // Subscribe to event
             RefreshData();
         }
 
@@ -36,68 +40,36 @@ namespace Inventory_Management
 
         private void UpdateInventoryValue()
         {
-            try
+            // Calculate the inventory value by summing up the prices of all products
+            InventoryValue = 0;
+            foreach (DataRow row in addProducts.inventory.Rows)
             {
-                connect.Open();
+                double price = Convert.ToDouble(row["Price"]);
+                int stock = Convert.ToInt32(row["Stock"]);
+                InventoryValue += price * stock;
+            }
 
-                string query = "SELECT SUM(price * stock) AS TotalValue FROM productss";
-                using (SqlCommand cmd = new SqlCommand(query, connect))
-                {
-                    object result = cmd.ExecuteScalar();
-                    if (result != DBNull.Value)
-                    {
-                        double totalValue = Convert.ToDouble(result);
-                        inventoryValue.Text = totalValue.ToString("C2");
-                    }
-                    else
-                    {
-                        inventoryValue.Text = "$0.00";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating inventory value: " + ex.Message);
-            }
-            finally
-            {
-                connect.Close();
-            }
+            // Update the inventoryValue label
+            inventoryValue.Text = InventoryValue.ToString("C");
         }
 
         private void UpdateRemainingItems()
         {
-            try
+            // Calculate the total remaining stocks
+            RemainingStocks = 0;
+            foreach (DataRow row in addProducts.inventory.Rows)
             {
-                connect.Open();
+                int stock = Convert.ToInt32(row["Stock"]);
+                RemainingStocks += stock;
+            }
 
-                string query = "SELECT SUM(stock) AS TotalStock FROM productss";
-                using (SqlCommand cmd = new SqlCommand(query, connect))
-                {
-                    object result = cmd.ExecuteScalar();
-                    if (result != DBNull.Value)
-                    {
-                        int totalStock = Convert.ToInt32(result);
-                        remainingItems.Text = totalStock.ToString();
-                    }
-                    else
-                    {
-                        remainingItems.Text = "0";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating remaining items: " + ex.Message);
-            }
-            finally
-            {
-                connect.Close();
-            }
+            // Update the remainingStocks label
+            remainingItems.Text = RemainingStocks.ToString();
         }
+        
         private void Dashboard_Load(object sender, EventArgs e)
         {
-
+            addProducts.InventoryUpdated += AddProducts_InventoryUpdated;
         }
 
         private void inventoryValue_Click(object sender, EventArgs e)
@@ -106,25 +78,25 @@ namespace Inventory_Management
         }
         private void UpdateLowStockItemsCount()
         {
-            try
+            // Count the number of items with stock below 5
+            int lowStockCount = 0;
+            foreach (DataRow row in addProducts.inventory.Rows)
             {
-                connect.Open();
-
-                string query = "SELECT COUNT(*) FROM productss WHERE stock <= 5";
-                using (SqlCommand cmd = new SqlCommand(query, connect))
+                int stock = Convert.ToInt32(row["Stock"]);
+                if (stock <= 5)
                 {
-                    int lowStockCount = (int)cmd.ExecuteScalar();
-                    items_lowOnStock.Text = lowStockCount.ToString();
+                    lowStockCount++;
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating low stock items count: " + ex.Message);
-            }
-            finally
-            {
-                connect.Close();
-            }
+
+            // Update the itemsLowOnStock label
+            items_lowOnStock.Text = lowStockCount.ToString();
+        }
+
+        private void AddProducts_InventoryUpdated(object sender, EventArgs e)
+        {
+            // When inventory is updated, refresh data in the Dashboard
+            RefreshData();
         }
     }
 }

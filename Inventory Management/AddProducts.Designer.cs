@@ -42,12 +42,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.addProduct_price = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.addProduct_category = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.addProduct_prodName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.addProduct_ID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.addProduct_category = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -84,10 +84,12 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.addProduct_category);
             this.panel2.Controls.Add(this.addProduct_clearBTN);
             this.panel2.Controls.Add(this.addProduct_updateBTN);
             this.panel2.Controls.Add(this.addProduct_removeBTN);
@@ -98,7 +100,6 @@
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.addProduct_price);
             this.panel2.Controls.Add(this.label6);
-            this.panel2.Controls.Add(this.addProduct_category);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.addProduct_prodName);
             this.panel2.Controls.Add(this.label3);
@@ -217,6 +218,7 @@
             this.addProduct_price.Name = "addProduct_price";
             this.addProduct_price.Size = new System.Drawing.Size(170, 24);
             this.addProduct_price.TabIndex = 8;
+            this.addProduct_price.TextChanged += new System.EventHandler(this.addProduct_price_TextChanged);
             // 
             // label6
             // 
@@ -227,16 +229,6 @@
             this.label6.Size = new System.Drawing.Size(46, 18);
             this.label6.TabIndex = 7;
             this.label6.Text = "Price:";
-            // 
-            // addProduct_category
-            // 
-            this.addProduct_category.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.addProduct_category.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addProduct_category.FormattingEnabled = true;
-            this.addProduct_category.Location = new System.Drawing.Point(133, 142);
-            this.addProduct_category.Name = "addProduct_category";
-            this.addProduct_category.Size = new System.Drawing.Size(208, 26);
-            this.addProduct_category.TabIndex = 6;
             // 
             // label4
             // 
@@ -284,6 +276,15 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Product ID:";
             // 
+            // addProduct_category
+            // 
+            this.addProduct_category.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addProduct_category.Location = new System.Drawing.Point(133, 144);
+            this.addProduct_category.Name = "addProduct_category";
+            this.addProduct_category.Size = new System.Drawing.Size(208, 24);
+            this.addProduct_category.TabIndex = 17;
+            this.addProduct_category.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // AddProducts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -314,7 +315,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox addProduct_price;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox addProduct_category;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox addProduct_prodName;
         private System.Windows.Forms.Label label3;
@@ -324,5 +324,6 @@
         private System.Windows.Forms.Button addProduct_removeBTN;
         private System.Windows.Forms.ComboBox addProduct_status;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox addProduct_category;
     }
 }

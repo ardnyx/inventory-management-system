@@ -12,24 +12,39 @@ namespace Inventory_Management
 {
     public partial class MainForm : Form
     {
+
+        public AddProducts AddProductsControl
+        {
+            get { return addProducts1; }
+        }
+        public static MainForm instance;
+        public static MainForm Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new MainForm();
+                }
+                return instance;
+            }
+        }
         public MainForm()
         {
             InitializeComponent();
-
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
-
         private void dashboard_btn_Click(object sender, EventArgs e)
         {
-            dashboard1.Visible = true;
+            dashboard2.Visible = true;
             addCategory1.Visible = false;
             addProducts1.Visible = false;
 
-            Dashboard adForm = dashboard1 as Dashboard;
+            Dashboard adForm = dashboard2 as Dashboard;
 
             if (adForm != null)
             {
@@ -39,7 +54,7 @@ namespace Inventory_Management
 
         private void categories_btn_Click(object sender, EventArgs e)
         {
-            dashboard1.Visible = false;
+            dashboard2.Visible = false;
             addCategory1.Visible = true;
             addProducts1.Visible = false;
 
@@ -53,7 +68,7 @@ namespace Inventory_Management
 
         private void products_btn_Click(object sender, EventArgs e)
         {
-            dashboard1.Visible = false;
+            dashboard2.Visible = false;
             addCategory1.Visible = false;
             addProducts1.Visible = true;
 

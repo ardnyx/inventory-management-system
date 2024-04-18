@@ -14,14 +14,11 @@ namespace Inventory_Management
 {
     public partial class AddProducts : UserControl
     {
-        SqlConnection connect
-            = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Reiyane\Documents\inventory.mdf;Integrated Security=True;Connect Timeout=30");
+        public DataTable inventory = new DataTable();
+        public event EventHandler InventoryUpdated;
         public AddProducts()
         {
             InitializeComponent();
-
-            DisplayCategories();
-            DisplayAllProducts();
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
@@ -32,296 +29,169 @@ namespace Inventory_Management
                 Invoke((MethodInvoker)refreshData);
                 return;
             }
-
-            addProduct_category.Items.Clear();
-
-            DisplayCategories();
-            DisplayAllProducts();
-        }
-        public void DisplayAllProducts()
-        {
-            AddProductsData apData = new AddProductsData();
-            List<AddProductsData> listData = apData.AllProductsData();
-
-            dataGridView1.DataSource = listData;
-        }
-        public bool EmptyFields()
-        {
-            if (addProduct_ID.Text == "" || addProduct_prodName.Text == "" || addProduct_category.SelectedIndex == -1
-                || addProduct_price.Text == "" || addProduct_stock.Text == "")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
-        public void DisplayCategories()
-        {
-            if (CheckConnection())
-            {
-                try
-                {
-                    connect.Open();
-
-                    string selectData = "SELECT * FROM categories";
-
-                    using(SqlCommand cmd = new SqlCommand(selectData, connect))
-                    {
-                        SqlDataReader reader = cmd.ExecuteReader();
-
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                addProduct_category.Items.Add(reader["category"].ToString()); 
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    connect.Close();
-                }
-            }
-        }
         private void addProduct_addBTN_Click(object sender, EventArgs e)
         {
-            if (EmptyFields())
+
+            string prodId = addProduct_ID.Text;
+            string prodName = addProduct_prodName.Text;
+            string category = addProduct_category.Text;
+
+            double price;
+            if (!double.TryParse(addProduct_price.Text, out price))
             {
-                MessageBox.Show("Empty Fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a valid price.", "Invalid Price", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else
+
+            int stock;
+            if (!int.TryParse(addProduct_stock.Text, out stock))
             {
-                if (CheckConnection())
-                {
-                    try
-                    {
-                        connect.Open();
-
-                        string selectData = "SELECT * FROM productss WHERE prod_id = @prodID";
-
-                        using (SqlCommand cmd = new SqlCommand(selectData, connect))
-                        {
-                            cmd.Parameters.AddWithValue("@prodID", addProduct_ID.Text.Trim());
-
-                            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                            DataTable table = new DataTable();
-
-                            adapter.Fill(table);
-
-                            if (table.Rows.Count > 0)
-                            {
-                                MessageBox.Show("Product ID: " + addProduct_ID.Text.Trim() + " is already existing"
-                                    , "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                            else
-                            {
-                                string insertData = "INSERT INTO productss " +
-                                    "(prod_id, prod_name, category, price, stock, status) " +
-                                    "VALUES(@prodID, @prodName, @cat, @price, @stock, @status)";
-
-                                using (SqlCommand insertD = new SqlCommand(insertData, connect))
-                                {
-                                    insertD.Parameters.AddWithValue("@prodID", addProduct_ID.Text.Trim());
-                                    insertD.Parameters.AddWithValue("@prodName", addProduct_prodName.Text.Trim());
-                                    insertD.Parameters.AddWithValue("@cat", addProduct_category.Text.Trim());
-                                    insertD.Parameters.AddWithValue("@price", addProduct_price.Text.Trim());
-                                    insertD.Parameters.AddWithValue("@stock", addProduct_stock.Text.Trim());
-
-                                    // Set the status based on the stock value
-                                    string status = addProduct_status.Text.Trim();
-                                    int stock = Convert.ToInt32(addProduct_stock.Text.Trim());
-                                    if (stock <= 5)
-                                    {
-                                        status = "LOW ON STOCKS";
-                                    }
-                                    insertD.Parameters.AddWithValue("@status", status);
-
-                                    insertD.ExecuteNonQuery();
-                                    ClearFields();
-                                    DisplayAllProducts();
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Failed Connection: " + ex, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        connect.Close();
-                    }
-                }
+                MessageBox.Show("Please enter a valid stock quantity.", "Invalid Stock", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+
+            string status = (string)addProduct_status.SelectedItem;
+
+            inventory.Rows.Add(prodId, prodName, category, price, stock, status);
+
+            ClearBoxes();
+            InventoryUpdated?.Invoke(this, EventArgs.Empty);
         }
 
-        public void ClearFields()
+        private void ClearBoxes()
         {
             addProduct_ID.Text = "";
             addProduct_prodName.Text = "";
-            addProduct_category.SelectedIndex = -1;
+            addProduct_category.Text = "";
             addProduct_price.Text = "";
             addProduct_stock.Text = "";
-            addProduct_status.Text = "";
-        }
-        public bool CheckConnection()
-        {
-            if (connect.State != ConnectionState.Open)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            addProduct_status.SelectedIndex = -1;
         }
 
         private void addProduct_clearBTN_Click(object sender, EventArgs e)
         {
-            ClearFields();
+            ClearBoxes();
         }
-
-        private int getID = 0;
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex != -1)
+            try
             {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+                addProduct_ID.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[0].ToString();
+                addProduct_prodName.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[1].ToString();
+                addProduct_category.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[2].ToString();
+                addProduct_price.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[3].ToString();
+                addProduct_stock.Text = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[4].ToString();
 
-                getID = (int)row.Cells[0].Value;
-
-                addProduct_ID.Text = row.Cells[1].Value.ToString();
-                addProduct_prodName.Text = row.Cells[2].Value.ToString();
-                addProduct_category.Text = row.Cells[3].Value.ToString();
-                addProduct_price.Text = row.Cells[4].Value.ToString();
-                addProduct_stock.Text = row.Cells[5].Value.ToString();
-                addProduct_status.Text = row.Cells[6].Value.ToString();
+                string statusToLookFor = inventory.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[5].ToString();
+                addProduct_status.SelectedIndex = addProduct_status.Items.IndexOf(statusToLookFor);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception silently (do nothing)
             }
         }
+
 
         private void addProduct_updateBTN_Click(object sender, EventArgs e)
         {
-            if (EmptyFields())
+            try
             {
-                MessageBox.Show("Empty Fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                if (MessageBox.Show("Are you sure you want to update Product ID: " 
-                    + addProduct_ID.Text.Trim() + "?", "Confirmation Message"
-                    , MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                // Check if a row is selected
+                if (dataGridView1.SelectedCells.Count > 0)
                 {
-                    if (CheckConnection())
+                    // Get the index of the selected row
+                    int rowIndex = dataGridView1.CurrentCell.RowIndex;
+
+                    // Update the values in the DataRow associated with the selected row
+                    inventory.Rows[rowIndex]["Product ID"] = addProduct_ID.Text;
+                    inventory.Rows[rowIndex]["Product Name"] = addProduct_prodName.Text;
+                    inventory.Rows[rowIndex]["Category"] = addProduct_category.Text;
+
+                    double price;
+                    if (double.TryParse(addProduct_price.Text, out price))
                     {
-                        try
-                        {
-                            connect.Open();
-
-                            string updateData = "UPDATE productss SET prod_id = @prodID, prod_name = @prodName, category = @cat, " +
-                                "stock = @stock, price = @price, status = @status WHERE id = @id";
-
-                            using (SqlCommand updateD = new SqlCommand(updateData, connect))
-                            {
-                                updateD.Parameters.AddWithValue("@prodID", addProduct_ID.Text.Trim());
-                                updateD.Parameters.AddWithValue("@prodName", addProduct_prodName.Text.Trim());
-                                updateD.Parameters.AddWithValue("@cat", addProduct_category.Text.Trim());
-                                updateD.Parameters.AddWithValue("@price", addProduct_price.Text.Trim());
-                                updateD.Parameters.AddWithValue("@stock", addProduct_stock.Text.Trim());
-
-                                string status = addProduct_status.Text.Trim();
-                                int stock = Convert.ToInt32(addProduct_stock.Text.Trim());
-                                if (stock == 0)
-                                {
-                                    updateD.Parameters.AddWithValue("@status", "Out of Stock");
-                                }
-                                else if (stock <= 5)
-                                {
-                                    updateD.Parameters.AddWithValue("@status", "Low on Stocks");
-                                }
-                                else
-                                {
-                                    updateD.Parameters.AddWithValue("@status", status);
-                                }
-                                updateD.Parameters.AddWithValue("@id", getID);
-
-                                updateD.ExecuteNonQuery();
-                                ClearFields();
-                                DisplayAllProducts();
-
-                                MessageBox.Show("Updated Successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Failed Connection: " + ex, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        finally
-                        {
-                            connect.Close();
-                        }
+                        inventory.Rows[rowIndex]["Price"] = price;
                     }
+                    else
+                    {
+                        MessageBox.Show("Please enter a valid price.", "Invalid Price", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    int stock;
+                    if (int.TryParse(addProduct_stock.Text, out stock))
+                    {
+                        inventory.Rows[rowIndex]["Stock"] = stock;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a valid stock quantity.", "Invalid Stock", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    inventory.Rows[rowIndex]["Status"] = addProduct_status.SelectedItem;
+
+                    // Refresh the DataGridView to reflect the changes
+                    dataGridView1.Refresh();
+                    InventoryUpdated?.Invoke(this, EventArgs.Empty);
                 }
+                else
+                {
+                    MessageBox.Show("Please select a row to update.", "No Row Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Error: " + err.Message, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+
         private void addProduct_removeBTN_Click(object sender, EventArgs e)
         {
-            if (EmptyFields())
+           try
             {
-                MessageBox.Show("Empty Fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                inventory.Rows[dataGridView1.CurrentCell.RowIndex].Delete();
+                ClearBoxes();
+                InventoryUpdated?.Invoke(this, EventArgs.Empty);
             }
-            else
+            catch (Exception err)
             {
-                if (MessageBox.Show("Are you sure you want to remove Product ID: "
-                    + addProduct_ID.Text.Trim() + "?", "Confirmation Message"
-                    , MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    if (CheckConnection())
-                    {
-                        try
-                        {
-                            connect.Open();
-
-                            string deleteData = "DELETE FROM productss WHERE id = @id";
-
-                            using (SqlCommand deleteD = new SqlCommand(deleteData, connect))
-                            {
-                                deleteD.Parameters.AddWithValue("@id", getID);
-
-                                deleteD.ExecuteNonQuery();
-                                ClearFields();
-                                DisplayAllProducts();
-
-                                MessageBox.Show("Updated Successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Failed Connection: " + ex, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        finally
-                        {
-                            connect.Close();
-                        }
-                    }
-                }
+                MessageBox.Show("Error: " + err, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            
         }
 
         private void AddProducts_Load(object sender, EventArgs e)
+        {
+            inventory.Columns.Add("Product ID");
+            inventory.Columns.Add("Product Name");
+            inventory.Columns.Add("Category");
+            inventory.Columns.Add("Price");
+            inventory.Columns.Add("Stock");
+            inventory.Columns.Add("Status");
+
+            dataGridView1.DataSource = inventory;
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void addProduct_price_TextChanged(object sender, EventArgs e)
         {
 
         }
