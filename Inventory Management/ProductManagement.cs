@@ -13,10 +13,13 @@ namespace Inventory_Management
     public partial class ProductManagement : Form
     {
         Main_Form main_Form;
-        static DataTable inventory = new DataTable();
-        public ProductManagement()
+        public static DataTable inventory = new DataTable();
+        public static double finalPrice { get; set; }
+        public static int finalStock { get; set; }
+        public ProductManagement(Main_Form mainForm)
         {
             InitializeComponent();
+            main_Form = mainForm;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
@@ -48,6 +51,7 @@ namespace Inventory_Management
             string status = (string)addProduct_status.SelectedItem;
 
             inventory.Rows.Add(prodId, prodName, category, price, stock, status);
+            main_Form.UpdateInventoryValues();
             ClearBoxes();
         }
         private void ClearBoxes()
@@ -64,6 +68,7 @@ namespace Inventory_Management
             try
             {
                 inventory.Rows[dataGridView1.CurrentCell.RowIndex].Delete();
+                main_Form.UpdateInventoryValues();
                 ClearBoxes();
             }
             catch (Exception err)
@@ -110,9 +115,10 @@ namespace Inventory_Management
                     }
 
                     inventory.Rows[rowIndex]["Status"] = addProduct_status.SelectedItem;
-
+                    
                     // Refresh the DataGridView to reflect the changes
                     dataGridView1.Refresh();
+                    main_Form.UpdateInventoryValues();
                 }
                 else
                 {
@@ -132,9 +138,16 @@ namespace Inventory_Management
 
         private void dashboard_BTN_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            main_Form = new Main_Form();
-            main_Form.ShowDialog();
+            if (main_Form == null || main_Form.IsDisposed)
+            {
+                main_Form = new Main_Form();
+                main_Form.Show();
+            }
+            else
+            {
+                main_Form.Show();
+                main_Form.BringToFront();
+            }
         }
 
         private void products_BTN_Click(object sender, EventArgs e)
