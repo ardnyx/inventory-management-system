@@ -17,6 +17,7 @@ namespace Inventory_Management
         {
             InitializeComponent();
             UpdateInventoryValues();
+            UpdateLowStockCount();
         }
 
         private void dashbord_BTN_Click(object sender, EventArgs e)
@@ -46,7 +47,6 @@ namespace Inventory_Management
         {
             double totalPrice = 0;
             int totalStock = 0;
-
             // Iterate through each row in the inventory DataTable
             foreach (DataRow row in ProductManagement.inventory.Rows)
             {
@@ -57,9 +57,27 @@ namespace Inventory_Management
                 totalStock += stock;
             }
 
-            // Update the labels with the new values
-            inventoryValue.Text = totalPrice.ToString();
+            inventoryValue.Text = totalPrice.ToString("C");
             remainingStocks.Text = totalStock.ToString();
+        }
+
+        public void UpdateLowStockCount()
+        {
+            int lowStockCount = 0;
+
+            // Iterate through each row in the inventory DataTable
+            foreach (DataRow row in ProductManagement.inventory.Rows)
+            {
+                int stock = Convert.ToInt32(row["Stock"]);
+
+                // Check if stock is less than 5
+                if (stock < 5)
+                {
+                    lowStockCount++;
+                }
+            }
+
+            items_lowInStock.Text = lowStockCount.ToString();
         }
         private void inventoryValue_Click(object sender, EventArgs e)
         {

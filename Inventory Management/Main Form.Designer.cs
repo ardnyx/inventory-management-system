@@ -34,7 +34,6 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.products_BTN = new System.Windows.Forms.Button();
-            this.categories_BTN = new System.Windows.Forms.Button();
             this.dashbord_BTN = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -95,7 +94,6 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(113)))), ((int)(((byte)(73)))));
             this.panel2.Controls.Add(this.products_BTN);
-            this.panel2.Controls.Add(this.categories_BTN);
             this.panel2.Controls.Add(this.dashbord_BTN);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
@@ -112,29 +110,13 @@
             this.products_BTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.products_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.products_BTN.ForeColor = System.Drawing.Color.White;
-            this.products_BTN.Location = new System.Drawing.Point(0, 308);
+            this.products_BTN.Location = new System.Drawing.Point(0, 263);
             this.products_BTN.Name = "products_BTN";
             this.products_BTN.Size = new System.Drawing.Size(200, 37);
             this.products_BTN.TabIndex = 3;
             this.products_BTN.Text = "Product Management";
             this.products_BTN.UseVisualStyleBackColor = true;
             this.products_BTN.Click += new System.EventHandler(this.products_BTN_Click);
-            // 
-            // categories_BTN
-            // 
-            this.categories_BTN.FlatAppearance.BorderSize = 0;
-            this.categories_BTN.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Green;
-            this.categories_BTN.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Green;
-            this.categories_BTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.categories_BTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.categories_BTN.ForeColor = System.Drawing.Color.White;
-            this.categories_BTN.Location = new System.Drawing.Point(0, 254);
-            this.categories_BTN.Name = "categories_BTN";
-            this.categories_BTN.Size = new System.Drawing.Size(200, 37);
-            this.categories_BTN.TabIndex = 2;
-            this.categories_BTN.Text = "Categories";
-            this.categories_BTN.UseVisualStyleBackColor = true;
-            this.categories_BTN.Click += new System.EventHandler(this.categories_BTN_Click);
             // 
             // dashbord_BTN
             // 
@@ -331,7 +313,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button products_BTN;
-        private System.Windows.Forms.Button categories_BTN;
         private System.Windows.Forms.Button dashbord_BTN;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.PictureBox pictureBox1;

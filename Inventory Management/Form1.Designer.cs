@@ -33,8 +33,6 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.register_label = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.login_btn = new System.Windows.Forms.Button();
             this.login_pass = new System.Windows.Forms.TextBox();
             this.login_username = new System.Windows.Forms.TextBox();
@@ -52,8 +50,6 @@
             this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.register_label);
-            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.login_btn);
             this.panel1.Controls.Add(this.login_pass);
             this.panel1.Controls.Add(this.login_username);
@@ -94,38 +90,15 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Username";
             // 
-            // register_label
-            // 
-            this.register_label.AutoSize = true;
-            this.register_label.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.register_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.register_label.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.register_label.Location = new System.Drawing.Point(176, 335);
-            this.register_label.Name = "register_label";
-            this.register_label.Size = new System.Drawing.Size(63, 18);
-            this.register_label.TabIndex = 4;
-            this.register_label.Text = "Register";
-            this.register_label.Click += new System.EventHandler(this.register_label_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(81, 335);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 18);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "No Account? ";
-            // 
             // login_btn
             // 
             this.login_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(113)))), ((int)(((byte)(73)))));
             this.login_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.login_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.login_btn.ForeColor = System.Drawing.Color.White;
-            this.login_btn.Location = new System.Drawing.Point(61, 267);
+            this.login_btn.Location = new System.Drawing.Point(61, 271);
             this.login_btn.Name = "login_btn";
-            this.login_btn.Size = new System.Drawing.Size(189, 42);
+            this.login_btn.Size = new System.Drawing.Size(189, 43);
             this.login_btn.TabIndex = 2;
             this.login_btn.Text = "Login";
             this.login_btn.UseVisualStyleBackColor = false;
@@ -210,8 +183,6 @@
         private System.Windows.Forms.TextBox login_username;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label register_label;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button login_btn;
         private System.Windows.Forms.TextBox login_pass;
         private System.Windows.Forms.Label label5;

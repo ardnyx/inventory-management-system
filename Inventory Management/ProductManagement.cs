@@ -23,6 +23,40 @@ namespace Inventory_Management
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
+        private bool ValidateProduct(string prodId, string prodName, int rowIndexToUpdate)
+        {
+            // Trim the input strings
+            prodId = prodId.Trim();
+            prodName = prodName.Trim();
+
+            // Check if the product ID, product name, or category already exists
+            for (int i = 0; i < inventory.Rows.Count; i++)
+            {
+                if (i == rowIndexToUpdate) // Skip the current row being updated
+                {
+                    continue;
+                }
+
+                string existingProdId = inventory.Rows[i]["Product ID"].ToString().Trim();
+                string existingProdName = inventory.Rows[i]["Product Name"].ToString().Trim();
+                string existingCategory = inventory.Rows[i]["Category"].ToString().Trim();
+
+                if (String.Equals(existingProdId, prodId, StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Product ID already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false; // Return false indicating validation failed
+                }
+
+                if (String.Equals(existingProdName, prodName, StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Product Name already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false; // Return false indicating validation failed
+                }
+            }
+
+            // Validation passed if no match is found
+            return true;
+        }
         private void addProduct_ID_TextChanged(object sender, EventArgs e)
         {
 
@@ -30,9 +64,15 @@ namespace Inventory_Management
 
         private void addProduct_addBTN_Click(object sender, EventArgs e)
         {
+
             string prodId = addProduct_ID.Text;
             string prodName = addProduct_prodName.Text;
             string category = addProduct_category.Text;
+
+            if (!ValidateProduct(prodId, prodName, -1))
+            {
+                return;
+            }
 
             double price;
             if (!double.TryParse(addProduct_price.Text, out price))
@@ -48,10 +88,20 @@ namespace Inventory_Management
                 return;
             }
 
-            string status = (string)addProduct_status.SelectedItem;
+            string status = addProduct_status.Text;
+            if (stock == 0)
+            {
+                status = "OUT OF STOCK";
+            }
+            else if (stock < 5)
+            {
+                status = "LOW ON STOCKS";
+            }
+            else status = (string)addProduct_status.SelectedItem;
 
             inventory.Rows.Add(prodId, prodName, category, price, stock, status);
             main_Form.UpdateInventoryValues();
+            main_Form.UpdateLowStockCount();
             ClearBoxes();
         }
         private void ClearBoxes()
@@ -64,71 +114,79 @@ namespace Inventory_Management
             addProduct_status.SelectedIndex = -1;
         }
         private void addProduct_removeBTN_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                inventory.Rows[dataGridView1.CurrentCell.RowIndex].Delete();
-                main_Form.UpdateInventoryValues();
-                ClearBoxes();
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show("Error: " + err, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        {     
+            inventory.Rows[dataGridView1.CurrentCell.RowIndex].Delete();
+            main_Form.UpdateInventoryValues();
+            main_Form.UpdateLowStockCount();
+            ClearBoxes();
         }
 
         private void addProduct_updateBTN_Click(object sender, EventArgs e)
         {
-            try
+            
+            // Check if a row is selected
+            if (dataGridView1.SelectedCells.Count > 0)
             {
-                // Check if a row is selected
-                if (dataGridView1.SelectedCells.Count > 0)
+                // Get the index of the selected row
+                int rowIndex = dataGridView1.CurrentCell.RowIndex;
+
+                // Get the existing values
+                string existingProdId = inventory.Rows[rowIndex]["Product ID"].ToString();
+                string existingProdName = inventory.Rows[rowIndex]["Product Name"].ToString();
+                string existingCategory = inventory.Rows[rowIndex]["Category"].ToString();
+
+                // Get the new values
+                string newProdId = addProduct_ID.Text;
+                string newProdName = addProduct_prodName.Text;
+                string newCategory = addProduct_category.Text;
+
+                // Validate the product
+                if (!ValidateProduct(newProdId, newProdName, rowIndex))
                 {
-                    // Get the index of the selected row
-                    int rowIndex = dataGridView1.CurrentCell.RowIndex;
+                    return; // Exit the method if validation failed
+                }
 
-                    // Update the values in the DataRow associated with the selected row
-                    inventory.Rows[rowIndex]["Product ID"] = addProduct_ID.Text;
-                    inventory.Rows[rowIndex]["Product Name"] = addProduct_prodName.Text;
-                    inventory.Rows[rowIndex]["Category"] = addProduct_category.Text;
+                // Update the values in the DataRow associated with the selected row
+                inventory.Rows[rowIndex]["Product ID"] = newProdId;
+                inventory.Rows[rowIndex]["Product Name"] = newProdName;
+                inventory.Rows[rowIndex]["Category"] = newCategory;
 
-                    double price;
-                    if (double.TryParse(addProduct_price.Text, out price))
-                    {
-                        inventory.Rows[rowIndex]["Price"] = price;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please enter a valid price.", "Invalid Price", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    int stock;
-                    if (int.TryParse(addProduct_stock.Text, out stock))
-                    {
-                        inventory.Rows[rowIndex]["Stock"] = stock;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please enter a valid stock quantity.", "Invalid Stock", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    inventory.Rows[rowIndex]["Status"] = addProduct_status.SelectedItem;
-                    
-                    // Refresh the DataGridView to reflect the changes
-                    dataGridView1.Refresh();
-                    main_Form.UpdateInventoryValues();
+                double price;
+                if (double.TryParse(addProduct_price.Text, out price))
+                {
+                    inventory.Rows[rowIndex]["Price"] = price;
                 }
                 else
                 {
-                    MessageBox.Show("Please select a row to update.", "No Row Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please enter a valid price.", "Invalid Price", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+
+                int stock;
+                if (int.TryParse(addProduct_stock.Text, out stock))
+                {
+                    inventory.Rows[rowIndex]["Stock"] = stock;
+
+                    // Update status based on stock quantity
+                    string status = (stock == 0) ? "OUT OF STOCK" : (stock < 5) ? "LOW ON STOCKS" : (string)addProduct_status.SelectedItem;
+                    inventory.Rows[rowIndex]["Status"] = status;
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid stock quantity.", "Invalid Stock", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Refresh the DataGridView to reflect the changes
+                dataGridView1.Refresh();
+                main_Form.UpdateInventoryValues();
+                main_Form.UpdateLowStockCount();
             }
-            catch (Exception err)
+            else
             {
-                MessageBox.Show("Error: " + err.Message, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please select a row to update.", "No Row Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            
         }
 
         private void addProduct_clearBTN_Click(object sender, EventArgs e)

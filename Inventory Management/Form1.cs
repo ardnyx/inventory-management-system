@@ -28,65 +28,23 @@ namespace Inventory_Management
 
         private void login_btn_Click(object sender, EventArgs e)
         {
-            if (checkConnection())
+            if (login_username.Text == "admin" && login_pass.Text == "admin")
             {
-                try
-                {
-                    connect.Open();
-
-                    string selectData = "SELECT * FROM users WHERE username = @usern AND password = @pass";
-
-                    using(SqlCommand cmd = new SqlCommand(selectData, connect))
-                    {
-                        cmd.Parameters.AddWithValue("@usern", login_username.Text.Trim());
-                        cmd.Parameters.AddWithValue("@pass", login_pass.Text.Trim());
-
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        DataTable table = new DataTable();
-                        adapter.Fill(table);
-
-                        if (table.Rows.Count > 0)
-                        {
-                            MessageBox.Show("Login Successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            Main_Form mForm = new Main_Form();
-                            this.Hide();
-                            mForm.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Incorrect Username/Pass", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Connection failed: " + ex, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    connect.Close();
-                }
-
-            }
-        }
-
-        public bool checkConnection()
-        {
-            if (connect.State == ConnectionState.Closed)
-            {
-                return true;
+                MessageBox.Show("Login Successful", "Information Dialogue", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Main_Form main_Form = new Main_Form();
+                main_Form.ShowDialog();
+                this.Hide();
             }
             else
             {
-                return false;
+                MessageBox.Show("Username: admin\nPassword: admin", "Wrong Credentials", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+       
         private void register_label_Click(object sender, EventArgs e)
         {
-            RegisterForm regForm = new RegisterForm();
-            regForm.Show();
-            this.Hide();
+
         }
     }
 }

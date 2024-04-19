@@ -46,26 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddCategory.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AddCategory.Designer.cs">
-      <DependentUpon>AddCategory.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AddProducts.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AddProducts.Designer.cs">
-      <DependentUpon>AddProducts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AddProductsData.cs" />
-    <Compile Include="CategoriesData.cs" />
-    <Compile Include="Dashboard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Dashboard.Designer.cs">
-      <DependentUpon>Dashboard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,21 +66,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegisterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RegisterForm.Designer.cs">
-      <DependentUpon>RegisterForm.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="AddCategory.resx">
-      <DependentUpon>AddCategory.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AddProducts.resx">
-      <DependentUpon>AddProducts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dashboard.resx">
-      <DependentUpon>Dashboard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -119,9 +84,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="RegisterForm.resx">
-      <DependentUpon>RegisterForm.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
